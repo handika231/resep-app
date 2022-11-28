@@ -7,6 +7,8 @@ import 'package:recipe_app/model/comment/comment.dart';
 abstract class CommentService {
   Future<List<Comment>> getCommentById(String id);
   Future<void> addComment(String id, String comment);
+  Future<void> deleteComment(String id);
+  Future<void> updateComment(String id, String comment, String recipeId);
 }
 
 class CommentServiceImpl implements CommentService {
@@ -40,6 +42,33 @@ class CommentServiceImpl implements CommentService {
       },
       body: jsonEncode(
         {"recipe_id": id, "comments": comment},
+      ),
+    );
+  }
+
+  @override
+  Future<void> deleteComment(String id) async {
+    await http.delete(
+      Uri.parse('$BASE_URL/recipe/comment/$id/destroy'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $TOKEN',
+      },
+    );
+  }
+
+  @override
+  Future<void> updateComment(String id, String comment, String recipeId) async {
+    await http.post(
+      Uri.parse('$BASE_URL/recipe/comment/$id/update'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $TOKEN',
+      },
+      body: jsonEncode(
+        {"recipe_id": recipeId, "comments": comment},
       ),
     );
   }

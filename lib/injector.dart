@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:recipe_app/provider/edit_comment_notifier.dart';
 import 'package:recipe_app/utils/bookmark_service.dart';
 import 'package:recipe_app/utils/comment_service.dart';
 import 'package:recipe_app/utils/edit_recipe_service.dart';
@@ -36,4 +37,5 @@ void init() {
   locator.registerFactory(() => EditRecipeNotifier(locator()));
   locator.registerLazySingleton(() => CommentServiceImpl());
   locator.registerFactory(() => CommentNotifier(locator()));
+  locator.registerFactory(() => EditCommentNotifier(locator()));
 }

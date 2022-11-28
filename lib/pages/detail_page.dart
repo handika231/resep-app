@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/model/comment/comment.dart';
 import 'package:recipe_app/pages/add_coment_page.dart';
+import 'package:recipe_app/pages/edit_comment_page.dart';
 import 'package:recipe_app/provider/bookmark_notifier.dart';
 import 'package:recipe_app/provider/comment_notifier.dart';
 import 'package:recipe_app/routes/name_route.dart';
@@ -193,9 +194,11 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     fixedSize: Size(200.w, 45.h),
                   ),
-                  onPressed: () {
-                    Navigation.navigateWithArguments(
-                        Routes.editRecipe, widget.data);
+                  onPressed: () async {
+                    await Navigation.navigateWithArguments(
+                      Routes.editRecipe,
+                      widget.data,
+                    );
                   },
                   child: const Text(
                     "Edit Resep",
@@ -210,13 +213,45 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   _itemComment(List<Comment> comments, int index) {
+    Provider.of<CommentNotifier>(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Text(
-        'Komentar: ${comments[index].comments}',
-        style: TextStyle(
-          fontSize: 18.sp,
-          fontWeight: AppStyle.light,
+      child: ListTile(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return EditCommentPage(
+                  comment: comments[index],
+                );
+              },
+            ),
+          );
+          setState(() {});
+        },
+        title: Text(
+          'Komentar: ${comments[index].comments}',
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: AppStyle.light,
+          ),
+        ),
+        trailing: IconButton(
+          onPressed: () {
+            context.read<CommentNotifier>().removeComment(
+                  comments[index].id.toString(),
+                );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Berhasil dihapus'),
+              ),
+            );
+          },
+          icon: const Icon(
+            Icons.delete,
+            color: AppStyle.redColor,
+          ),
         ),
       ),
     );

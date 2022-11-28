@@ -8,8 +8,22 @@ import 'package:recipe_app/model/bookmarked/bookmarked.dart';
 
 import '../provider/bookmark_notifier.dart';
 
-class BookmarkPage extends StatelessWidget {
+class BookmarkPage extends StatefulWidget {
   const BookmarkPage({super.key});
+
+  @override
+  State<BookmarkPage> createState() => _BookmarkPageState();
+}
+
+class _BookmarkPageState extends State<BookmarkPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () =>
+          Provider.of<BookmarkNotifier>(context, listen: false).fetchBookmark(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +33,12 @@ class BookmarkPage extends StatelessWidget {
       builder: (context, value, child) {
         switch (value.state) {
           case ResultState.NoData:
-            return const Center(
-              child: Text('No Data'),
+            return Center(
+              child: Lottie.asset(
+                'empty'.lottie,
+                height: 300.h,
+                width: 1.sw,
+              ),
             );
           case ResultState.HasData:
             return ListView.builder(

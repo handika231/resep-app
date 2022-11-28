@@ -19,7 +19,16 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => Provider.of<ProfileNotifier>(context, listen: false).fetchProfile(),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileNotifier>(context, listen: false);
     return Consumer<ProfileNotifier>(
       builder: (context, value, child) {
         switch (value.state) {

@@ -25,6 +25,16 @@ class CommentNotifier extends ChangeNotifier {
   Future<void> addComments(String id, String comment) async {
     try {
       await service.addComment(id, comment);
+      commentController.clear();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> removeComment(String id) async {
+    try {
+      await service.deleteComment(id);
+      notifyListeners();
     } catch (e) {
       throw Exception(e);
     }

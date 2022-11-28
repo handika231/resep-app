@@ -9,8 +9,22 @@ import '../common/result_state.dart';
 import '../model/followers/followers.dart';
 import '../provider/followers_notifier.dart';
 
-class FollowersPage extends StatelessWidget {
+class FollowersPage extends StatefulWidget {
   const FollowersPage({super.key});
+
+  @override
+  State<FollowersPage> createState() => _FollowersPageState();
+}
+
+class _FollowersPageState extends State<FollowersPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => Provider.of<FollowersNotifier>(context, listen: false)
+          .fetchFollowers(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

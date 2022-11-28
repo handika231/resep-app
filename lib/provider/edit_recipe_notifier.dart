@@ -19,6 +19,10 @@ class EditRecipeNotifier extends ChangeNotifier {
         sourceController.text,
         timeController.text,
       );
+      descriptionController.clear();
+      titleController.clear();
+      sourceController.clear();
+      timeController.clear();
     } catch (e) {
       throw Exception();
     }

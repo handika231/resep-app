@@ -9,6 +9,7 @@ import 'injector.dart' as di;
 import 'provider/add_recipe_notifier.dart';
 import 'provider/bookmark_notifier.dart';
 import 'provider/comment_notifier.dart';
+import 'provider/edit_comment_notifier.dart';
 import 'provider/edit_recipe_notifier.dart';
 import 'provider/followers_notifier.dart';
 import 'provider/login_notifier.dart';
@@ -57,7 +58,10 @@ class Application extends StatelessWidget {
             ),
             ChangeNotifierProvider(
               create: (_) => di.locator<CommentNotifier>(),
-            )
+            ),
+            ChangeNotifierProvider(
+              create: (_) => di.locator<EditCommentNotifier>(),
+            ),
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,

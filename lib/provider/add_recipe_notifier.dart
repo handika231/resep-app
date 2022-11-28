@@ -15,8 +15,17 @@ class AddRecipeNotifier extends ChangeNotifier {
     try {
       isAdd = true;
       notifyListeners();
-      await service.addRecipe(titleController.text, descriptionController.text,
-          sourceController.text, timeController.text);
+      await service.addRecipe(
+        titleController.text,
+        descriptionController.text,
+        sourceController.text,
+        timeController.text,
+      );
+      descriptionController.clear();
+      titleController.clear();
+      sourceController.clear();
+      timeController.clear();
+      isAdd = false;
     } catch (e) {
       isAdd = false;
       notifyListeners();
