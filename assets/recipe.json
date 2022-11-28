@@ -1,0 +1,20 @@
+{
+  "id": 2,
+  "user_id": 1,
+  "recipe_image": "https://admin.nanokost.com//app/public/berkas/11232022090908637de3340fa02.jpg",
+  "title": "Testing",
+  "description": "Testing Desc",
+  "source": "Testing Source",
+  "cooking_time": "1 jam 30 menit",
+  "total_visitor": 2,
+
+  "recipe_comment": [],
+  "recipe_ingredient": [
+    {
+      "id": 1,
+      "recipe_id": 2,
+      "ingredient": "Test Bahan",
+      "is_active": 1
+    }
+  ]
+}
