@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_app/model/comment/comment.dart';
+import 'package:recipe_app/pages/add_coment_page.dart';
 import 'package:recipe_app/provider/bookmark_notifier.dart';
 import 'package:recipe_app/provider/comment_notifier.dart';
 import 'package:recipe_app/routes/name_route.dart';
@@ -12,17 +13,20 @@ import '../common/app_style.dart';
 import '../common/extension.dart';
 import '../model/recipe_model/recipe_model.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final RecipeModel data;
   const DetailPage({super.key, required this.data});
 
   @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  @override
   Widget build(BuildContext context) {
-    final bookmarkNotifier =
-        Provider.of<BookmarkNotifier>(context, listen: false);
+    Provider.of<BookmarkNotifier>(context, listen: false);
     final commentNotifier =
         Provider.of<CommentNotifier>(context, listen: false);
-    print(data.id);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -32,7 +36,7 @@ class DetailPage extends StatelessWidget {
               Stack(
                 children: [
                   Hero(
-                    tag: 'image${data.id}',
+                    tag: 'image${widget.data.id}',
                     child: Lottie.asset(
                       'food'.lottie,
                       height: 200.h,
@@ -50,7 +54,8 @@ class DetailPage extends StatelessWidget {
                             size: 40,
                           ),
                           onPressed: () async {
-                            await value.addBookmarked(data.id.toString());
+                            await value
+                                .addBookmarked(widget.data.id.toString());
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Berhasil ditambahkan'),
@@ -72,7 +77,7 @@ class DetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Nama resep: ${data.title}',
+                      'Nama resep: ${widget.data.title}',
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: AppStyle.semiBold,
@@ -82,7 +87,7 @@ class DetailPage extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      'Deskripsi resep: ${data.description}',
+                      'Deskripsi resep: ${widget.data.description}',
                       style: TextStyle(
                         fontSize: 16.sp,
                       ),
@@ -103,13 +108,13 @@ class DetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Sumber: ${data.source}',
+                      'Sumber: ${widget.data.source}',
                     ),
                     SizedBox(
                       height: 8.h,
                     ),
                     Text(
-                      'Waktu Memasak: ${data.cookingTime}',
+                      'Waktu Memasak: ${widget.data.cookingTime}',
                     ),
                   ],
                 ),
@@ -119,7 +124,8 @@ class DetailPage extends StatelessWidget {
               ),
               SizedBox(
                 child: FutureBuilder(
-                  future: commentNotifier.fetchComment(data.id.toString()),
+                  future:
+                      commentNotifier.fetchComment(widget.data.id.toString()),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
@@ -146,20 +152,31 @@ class DetailPage extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: comments.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w),
-                            child: Text(
-                              'Komentar: ${comments[index].comments}',
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: AppStyle.light,
-                              ),
-                            ),
-                          );
+                          return _itemComment(comments, index);
                         },
                       );
                     }
                   },
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddCommentPage(data: widget.data),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  child: const Text('Tambahkan komentar'),
                 ),
               ),
               SizedBox(
@@ -177,7 +194,8 @@ class DetailPage extends StatelessWidget {
                     fixedSize: Size(200.w, 45.h),
                   ),
                   onPressed: () {
-                    Navigation.navigateWithArguments(Routes.editRecipe, data);
+                    Navigation.navigateWithArguments(
+                        Routes.editRecipe, widget.data);
                   },
                   child: const Text(
                     "Edit Resep",
@@ -186,6 +204,19 @@ class DetailPage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  _itemComment(List<Comment> comments, int index) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Text(
+        'Komentar: ${comments[index].comments}',
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: AppStyle.light,
         ),
       ),
     );

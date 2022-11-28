@@ -18,6 +18,7 @@ class Routes {
   static const String detail = '/detail';
   static const String addRecipe = '/addRecipe';
   static const String editRecipe = '/editRecipe';
+  static const String comment = '/comment';
   static final routes = <String, WidgetBuilder>{
     main: (_) => const MainPage(),
     login: (_) => const LoginPage(),

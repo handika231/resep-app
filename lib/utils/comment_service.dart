@@ -6,6 +6,7 @@ import 'package:recipe_app/model/comment/comment.dart';
 
 abstract class CommentService {
   Future<List<Comment>> getCommentById(String id);
+  Future<void> addComment(String id, String comment);
 }
 
 class CommentServiceImpl implements CommentService {
@@ -26,5 +27,20 @@ class CommentServiceImpl implements CommentService {
     } else {
       throw Exception('Failed to load data');
     }
+  }
+
+  @override
+  Future<void> addComment(String id, String comment) async {
+    await http.post(
+      Uri.parse('$BASE_URL/recipe/comment/store'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $TOKEN',
+      },
+      body: jsonEncode(
+        {"recipe_id": id, "comments": comment},
+      ),
+    );
   }
 }
