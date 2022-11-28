@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_app/model/comment/comment.dart';
 import 'package:recipe_app/provider/bookmark_notifier.dart';
+import 'package:recipe_app/provider/comment_notifier.dart';
 import 'package:recipe_app/routes/name_route.dart';
 import 'package:recipe_app/routes/page_route.dart';
 
@@ -11,15 +13,16 @@ import '../common/extension.dart';
 import '../model/recipe_model/recipe_model.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final RecipeModel data;
+  const DetailPage({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    final RecipeModel data =
-        ModalRoute.of(context)!.settings.arguments as RecipeModel;
-
     final bookmarkNotifier =
         Provider.of<BookmarkNotifier>(context, listen: false);
+    final commentNotifier =
+        Provider.of<CommentNotifier>(context, listen: false);
+    print(data.id);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -109,6 +112,54 @@ class DetailPage extends StatelessWidget {
                       'Waktu Memasak: ${data.cookingTime}',
                     ),
                   ],
+                ),
+              ),
+              SizedBox(
+                height: 24.h,
+              ),
+              SizedBox(
+                child: FutureBuilder(
+                  future: commentNotifier.fetchComment(data.id.toString()),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: Text('Loading...'),
+                      );
+                    } else if (commentNotifier.listComment.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Belum ada komentar',
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: AppStyle.light,
+                          ),
+                        ),
+                      );
+                    } else {
+                      List<Comment> comments = snapshot.data;
+                      return ListView.separated(
+                        separatorBuilder: (context, index) => const Divider(
+                          thickness: 0.6,
+                          color: AppStyle.greyColor,
+                        ),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: comments.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w),
+                            child: Text(
+                              'Komentar: ${comments[index].comments}',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: AppStyle.light,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               SizedBox(

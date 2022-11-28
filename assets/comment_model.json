@@ -1,0 +1,15 @@
+{
+  "id": 3,
+  "user_id": 1,
+  "recipe_id": 3,
+  "parent_id": 0,
+  "comments": "Makanan ini sangat enak dan lezat",
+  "is_active": 1,
+  "user": {
+    "id": 1,
+    "name": "User",
+    "username": "user",
+    "email": "user@mail.com"
+  },
+  "child": []
+}

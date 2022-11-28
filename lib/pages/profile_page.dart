@@ -5,38 +5,36 @@ import 'package:provider/provider.dart';
 import '../common/app_style.dart';
 import '../common/extension.dart';
 import '../common/result_state.dart';
-import '../injector.dart' as di;
 import '../provider/followers_notifier.dart';
 import '../provider/profile_notifier.dart';
 import '../routes/name_route.dart';
 import '../routes/page_route.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<FollowersNotifier>(
-      create: (_) => di.locator<FollowersNotifier>(),
-      child: ChangeNotifierProvider(
-        create: (_) => di.locator<ProfileNotifier>(),
-        child: Consumer<ProfileNotifier>(
-          builder: (context, value, child) {
-            switch (value.state) {
-              case ResultState.NoData:
-                return const Center(child: Text('No Data'));
-              case ResultState.Loading:
-                return const Center(child: CircularProgressIndicator());
-              case ResultState.HasData:
-                return _buildContent(value, context);
-              default:
-                return Center(
-                  child: Text(value.message),
-                );
-            }
-          },
-        ),
-      ),
+    return Consumer<ProfileNotifier>(
+      builder: (context, value, child) {
+        switch (value.state) {
+          case ResultState.NoData:
+            return const Center(child: Text('No Data'));
+          case ResultState.Loading:
+            return const Center(child: CircularProgressIndicator());
+          case ResultState.HasData:
+            return _buildContent(value, context);
+          default:
+            return Center(
+              child: Text(value.message),
+            );
+        }
+      },
     );
   }
 

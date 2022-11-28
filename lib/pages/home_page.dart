@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_app/pages/detail_page.dart';
 
 import '../common/app_style.dart';
 import '../common/extension.dart';
@@ -52,7 +53,12 @@ class HomePage extends StatelessWidget {
       RecipeModel recipe, HomeNotifier homeNotifier, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigation.navigateWithArguments(Routes.detail, recipe);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(data: recipe),
+          ),
+        );
       },
       child: Dismissible(
         background: Container(

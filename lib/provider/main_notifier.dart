@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:recipe_app/pages/bookmark_page.dart';
 
-import '../injector.dart' as di;
 import '../pages/home_page.dart';
 import '../pages/profile_page.dart';
-import 'bookmark_notifier.dart';
-import 'home_notifier.dart';
 
 class MainNotifier extends ChangeNotifier {
   int currentIndex = 0;
@@ -31,14 +27,8 @@ class MainNotifier extends ChangeNotifier {
   ];
 
   final List<Widget> pages = [
-    ChangeNotifierProvider(
-      create: (_) => di.locator<HomeNotifier>(),
-      child: const HomePage(),
-    ),
-    ChangeNotifierProvider(
-      create: (_) => di.locator<BookmarkNotifier>(),
-      child: const BookmarkPage(),
-    ),
+    const HomePage(),
+    const BookmarkPage(),
     const ProfilePage(),
   ];
 }
