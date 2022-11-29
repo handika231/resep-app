@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../common/app_style.dart';
-import '../common/constant.dart';
 import '../provider/main_notifier.dart';
 
 class MainPage extends StatelessWidget {
@@ -10,8 +9,6 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(TOKEN);
-
     return Scaffold(
       bottomNavigationBar: Consumer<MainNotifier>(
         builder: (context, value, child) {

@@ -3,6 +3,7 @@ import 'package:recipe_app/provider/edit_comment_notifier.dart';
 import 'package:recipe_app/utils/bookmark_service.dart';
 import 'package:recipe_app/utils/comment_service.dart';
 import 'package:recipe_app/utils/edit_recipe_service.dart';
+import 'package:recipe_app/utils/login_helper.dart';
 
 import 'provider/add_recipe_notifier.dart';
 import 'provider/bookmark_notifier.dart';
@@ -24,9 +25,12 @@ void init() {
   locator.registerLazySingleton<FollowersServiceImpl>(
       () => FollowersServiceImpl());
   locator.registerLazySingleton(() => RecipeServiceImpl());
-  locator.registerFactory(() => ProfileNotifier(locator<UserServiceImpl>()));
+  locator.registerLazySingleton(() => LoginHelper());
+  locator.registerFactory(
+      () => ProfileNotifier(locator<UserServiceImpl>(), locator()));
   locator.registerFactory(() => HomeNotifier(locator()));
-  locator.registerFactory(() => LoginNotifier(locator<UserServiceImpl>()));
+  locator.registerFactory(
+      () => LoginNotifier(locator<UserServiceImpl>(), locator()));
   locator.registerFactory(() => RegisterNotifier(locator<UserServiceImpl>()));
   locator.registerFactory(() => FollowersNotifier(locator(), locator()));
   locator.registerLazySingleton(() => FollowHelper());

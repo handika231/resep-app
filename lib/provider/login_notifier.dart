@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/utils/login_helper.dart';
 
 import '../common/constant.dart';
 import '../model/login.dart';
@@ -8,7 +9,8 @@ import '../utils/user_service.dart';
 
 class LoginNotifier extends ChangeNotifier {
   final UserServiceImpl userService;
-  LoginNotifier(this.userService);
+  final LoginHelper loginHelper;
+  LoginNotifier(this.userService, this.loginHelper);
 
   bool isVisible = true;
   void changeVisibility() {
@@ -31,6 +33,7 @@ class LoginNotifier extends ChangeNotifier {
       login = await userService.login(email, password);
       if (login.apiToken != null) {
         TOKEN = login.apiToken ?? '';
+        await loginHelper.saveLogin(TOKEN);
         Navigation.navigateReplaceNamed(Routes.main);
       }
       isLogin = false;
